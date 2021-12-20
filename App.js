@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Giris from './screens/Giris';
 import {createStackNavigator} from '@react-navigation/stack';
 import Kayit from './screens/Kayit';
+import AnaSayfa from './screens/AnaSayfa';
 
 const Stack = createStackNavigator();
 const globalScreenOptions={
@@ -18,7 +19,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={globalScreenOptions}>
         <Stack.Screen name="Giris" component={Giris}/>     
-        <Stack.Screen name="Kayit" component={Kayit}/>     
+        <Stack.Screen name="Kayit" component={Kayit}/>
+        <Stack.Screen name="AnaSayfa" component={AnaSayfa}/>     
       </Stack.Navigator>
     </NavigationContainer>
   );

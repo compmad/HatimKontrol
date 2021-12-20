@@ -6,12 +6,28 @@ import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import Constants from 'expo-constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import {firebase,firebaseConfig, auth} from '../firebase';
-
+//import {firebaseConfiguration} from "../firebase.js";
+import firebase from 'firebase';
+const firebaseConfiguration = {
+  apiKey: "AIzaSyDh-fBtNNTdjQY2y_7Iba8CpeW0b59i-UA",
+  authDomain: "hatimkontrol.firebaseapp.com",
+  projectId: "hatimkontrol",
+  storageBucket: "hatimkontrol.appspot.com",
+  messagingSenderId: "133636307266",
+  appId: "1:133636307266:web:5072261e74b2e4040370db"
+};
+try {
+  
+  //console.log("firebaseConfig : " +firebaseConfiguration);
+  firebase.initializeApp(firebaseConfiguration);
+} catch (err) { 
+  // ignore app already initialized error in snack
+}
 const Kayit = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [verificationId, setVerificationId] = useState();
   const [verificationCode, setVerificationCode] = useState();
+  const [message, showMessage] = useState();
   const recaptchaVerifier = useRef(null);
 
   const sendVerification = async () => {
@@ -19,7 +35,7 @@ const Kayit = ({navigation}) => {
     // FirebaseAuthApplicationVerifier interface and can be
     // passed directly to `verifyPhoneNumber`.
     
-      const phoneProvider = new auth.PhoneAuthProvider();
+      const phoneProvider = new firebase.auth.PhoneAuthProvider();
       const verificationId = await phoneProvider.verifyPhoneNumber(
         phoneNumber,
         recaptchaVerifier.current
@@ -32,12 +48,13 @@ const Kayit = ({navigation}) => {
 
   const confirmCode = async () => {
     try {
-      const credential = auth.PhoneAuthProvider.credential(
+      const credential = firebase.auth.PhoneAuthProvider.credential(
         verificationId,
         verificationCode
       );
-      await auth().signInWithCredential(credential);
+      await firebase.auth().signInWithCredential(credential);
       showMessage({ text: "Telefon onay işlemi tamamlandı 👍" });
+      navigation.navigate("AnaSayfa");
     } catch (err) {
       showMessage({ text: `Error: ${err.message}`, color: "red" });
     }
@@ -48,7 +65,7 @@ const Kayit = ({navigation}) => {
       <View>
         <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
-          firebaseConfig={firebaseConfig}
+          firebaseConfig={firebaseConfiguration}
         />
         <View style={styles.inputContainer}>
           <Input
@@ -74,6 +91,15 @@ const Kayit = ({navigation}) => {
           />
         </View>
         <Button containerStyle={styles.verifyButton} onPress={confirmCode}title="Kodu Doğrula"/>
+        {message ? (
+        <TouchableOpacity
+          style={[StyleSheet.absoluteFill, { backgroundColor: 0xffffffee, justifyContent: "center" }]}
+          onPress={() => showMessage(undefined)}>
+          <Text style={{color: message.color || "blue", fontSize: 17, textAlign: "center", margin: 20, }}>
+            {message.text}
+          </Text>
+        </TouchableOpacity>
+      ) : undefined}
       </View>
     </KeyboardAwareScrollView>
   );
