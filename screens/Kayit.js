@@ -5,21 +5,21 @@ import {Button,Input,Image} from 'react-native-elements';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import Constants from 'expo-constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import { firebaseConfig } from "../firebase";
 //import {firebaseConfiguration} from "../firebase.js";
 import firebase from 'firebase';
-const firebaseConfiguration = {
+/*const firebaseConfiguration = {
   apiKey: "AIzaSyDh-fBtNNTdjQY2y_7Iba8CpeW0b59i-UA",
   authDomain: "hatimkontrol.firebaseapp.com",
   projectId: "hatimkontrol",
   storageBucket: "hatimkontrol.appspot.com",
   messagingSenderId: "133636307266",
   appId: "1:133636307266:web:5072261e74b2e4040370db"
-};
+};*/
 try {
   
   //console.log("firebaseConfig : " +firebaseConfiguration);
-  firebase.initializeApp(firebaseConfiguration);
+  firebase.initializeApp(firebaseConfig);
 } catch (err) { 
   // ignore app already initialized error in snack
 }
@@ -54,7 +54,7 @@ const Kayit = ({navigation}) => {
       );
       await firebase.auth().signInWithCredential(credential);
       showMessage({ text: "Telefon onay işlemi tamamlandı 👍" });
-      navigation.navigate("AnaSayfa");
+      navigation.navigate("Yonlendirme");
     } catch (err) {
       showMessage({ text: `Error: ${err.message}`, color: "red" });
     }
@@ -65,7 +65,7 @@ const Kayit = ({navigation}) => {
       <View>
         <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
-          firebaseConfig={firebaseConfiguration}
+          firebaseConfig={firebaseConfig}
         />
         <View style={styles.inputContainer}>
           <Input

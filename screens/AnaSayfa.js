@@ -3,19 +3,16 @@ import * as Contacts from 'expo-contacts';
 import * as React from 'react';
 
 const AnaSayfa = ({navigation}) => {
-    [data,setData] = React.useState();
+    [phoneNumbers,setPhoneNumbers] = React.useState([]);
     React.useEffect(() => {
         (async () => {
           const { status } = await Contacts.requestPermissionsAsync();
           if (status === 'granted') {
-            const { contactData } = await Contacts.getContactsAsync({
+            const  contactData   = await Contacts.getContactsAsync({
               fields: [Contacts.Fields.PhoneNumbers],
             });
-            setData(contactData);
-            if (contactData.length > 0) {
-              const contact = data[0];
-              console.log(contact);
-            }
+            phoneNumbers = contactData.data.map(contact => contact.phoneNumbers).flat();
+            setPhoneNumbers(phoneNumbers);            
           }
         })();
       }, []);

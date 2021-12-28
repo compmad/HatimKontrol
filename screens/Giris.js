@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import {Button,Input,Image} from 'react-native-elements';
 import { StatusBar } from 'expo-status-bar';
 import { KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react';
-import { auth, provider } from "../firebase"
+import { auth } from "../firebase"
 
 const Giris = ({navigation}) => {    
+    useEffect(()=>{
+        const unsubscribe = auth.onAuthStateChanged((authUser)=>{
+            console.log(authUser);
+            if(authUser){
+                navigation.replace("Yonlendirme");
+            }else{
+
+            }
+            
+        })
+        return unsubscribe;
+    },[]);
+    
     const girisYap = () => {
         navigation.navigate('Kayit');
     }
